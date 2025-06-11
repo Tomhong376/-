@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "ad.C": "cpp",
+        "pwm.C": "cpp",
+        "MAIN_TM8C.C": "cpp",
+        "system.C": "cpp",
+        "math0.C": "cpp",
+        "math1.C": "cpp",
+        "key_scan.C": "cpp",
+        "led.C": "cpp"
+    }
+}
