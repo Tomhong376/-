@@ -5,7 +5,7 @@
 #define ad_times 18
 #define ad_abandon_times 4
 
-#define V_overload 1000 // ´ı²â¶¨£¬mos¸ßÎÂÊ±µÄDºÍSÑ¹½µ£¬
+#define V_overload 1000 // å¾…æµ‹å®šï¼Œmosé«˜æ¸©æ—¶çš„Då’ŒSå‹é™ï¼Œ
 #define V_lowload 6
 
 bit flag_temp_alarm;
@@ -29,9 +29,9 @@ bit flag_ad : r_ad_flag.1;
 bit flag_reset_overload : r_ad_flag.2;
 bit flag_discharge : r_ad_flag.3;
 
-void short_protect_deal(void); // ¶ÌÂ·±£»¤´¦Àí
-void short_io_protect(void);   // ¶ÌÂ·±£»¤¼à²â
-void temp_alarm(void);		   // ÎÂ¶È±¨¾¯²âÊÔ
+void short_protect_deal(void); // çŸ­è·¯ä¿æŠ¤å¤„ç†
+void short_io_protect(void);   // çŸ­è·¯ä¿æŠ¤ç›‘æµ‹
+void temp_alarm(void);		   // æ¸©åº¦æŠ¥è­¦æµ‹è¯•
 void temperature_check();
 
 void ad_get(void)
@@ -57,9 +57,9 @@ void ad_get(void)
 		ad_sum += ad_value; // adcr;
 	}
                                                                             
-	AD_Start = 1; // ¿ªÊ¼
+	AD_Start = 1; // å¼€å§‹
 
-	short_io_protect(); // io¶ÌÂ·±£»¤
+	short_io_protect(); // ioçŸ­è·¯ä¿æŠ¤
 
 	if ((flag_mos && (!flag_mos_pre)) || ((!flag_mos) && flag_mos_pre))
 	{
@@ -88,7 +88,7 @@ void ad_deal(void)
 {
 	if (ad_turn == 0)
 	{
-		if (flag_mos_pre) // ²É¼¯¹ı³Ìmos×´Ì¬Îª´ò¿ª
+		if (flag_mos_pre) // é‡‡é›†è¿‡ç¨‹mosçŠ¶æ€ä¸ºæ‰“å¼€
 		{
 			p_check_ad_in();
 			$ adcc enable, p_check_ad;
@@ -97,15 +97,15 @@ void ad_deal(void)
 		ad_sum_bandgap = ad_sum;
 		ad_sum_out = ad_sum;
 		math_eword = ad_sum;
-		math_dword = 120 * 4096 * ad_times; // 1.2V,AD´ÎÊı
+		math_dword = 120 * 4096 * ad_times; // 1.2V,ADæ¬¡æ•°
 		Math_Dword_Div_Eword();
 		if (flag_mos_pre)
 		{
-			VDD_smoking = math_dword; // ÎüÑÌÊ±µÄ°åÉÏµÄVDDµçÑ¹
+			VDD_smoking = math_dword; // å¸çƒŸæ—¶çš„æ¿ä¸Šçš„VDDç”µå‹
 		}
 		else
 		{
-			VDD = math_dword; // ²É¼¯²»´øÔØµç³ØµçÑ¹
+			VDD = math_dword; // é‡‡é›†ä¸å¸¦è½½ç”µæ± ç”µå‹
 		}
 		// }
 	}
@@ -116,29 +116,29 @@ void ad_deal(void)
 		p_check_io_in();
 		// p_check_temprature_in();
 		math_eword = ad_sum;
-		math_byte = 120; // ¶ÔÓ¦µç×èÖµ200+1K,120*12/10=144
+		math_byte = 120; // å¯¹åº”ç”µé˜»å€¼200+1K,120*12/10=144
 
-		short_io_protect(); // io¶ÌÂ·±£»¤
+		short_io_protect(); // ioçŸ­è·¯ä¿æŠ¤
 
 		Math_Eword_Mul_Byte();
 
-		short_io_protect(); // io¶ÌÂ·±£»¤
+		short_io_protect(); // ioçŸ­è·¯ä¿æŠ¤
 
 		math_eword = ad_sum_bandgap;
 		Math_Dword_Div_Eword();
 
-		V_out = math_dword; // µÃµ½Êµ¼ÊÊä³öµçÑ¹//Èç¹ûÊÇºãÑ¹Êä³ö£¬¾ÍÔÚÕâÀïÈ¡µÃÊä³öµçÑ¹£¬ÕâÀïÊÇÈ«¹¦ÂÊÊä³ö
+		V_out = math_dword; // å¾—åˆ°å®é™…è¾“å‡ºç”µå‹//å¦‚æœæ˜¯æ’å‹è¾“å‡ºï¼Œå°±åœ¨è¿™é‡Œå–å¾—è¾“å‡ºç”µå‹ï¼Œè¿™é‡Œæ˜¯å…¨åŠŸç‡è¾“å‡º
 		flag_pwm_deal = 1;
 		if (flag_mos_pre)
 		{
-			if (VDD_smoking >= math_dword) // ¶ÌÂ·ºÍ¹ıÁ÷±£»¤ÅĞ¶Ï
+			if (VDD_smoking >= math_dword) // çŸ­è·¯å’Œè¿‡æµä¿æŠ¤åˆ¤æ–­
 			{
 				math_word = VDD_smoking - math_dword;
 				if (math_word >= V_overload)
 				{
 					//	p_test_1;
 					mos_duty = 0;
-					mos_off(); // ½ô¼±¹Ø±ÕÊä³ö
+					mos_off(); // ç´§æ€¥å…³é—­è¾“å‡º
 					//				flag_overload = 1;
 					//					flag_charge = 0;
 					flag_smoking = 0;
@@ -149,10 +149,10 @@ void ad_deal(void)
 					flag_led_g = 1;
 					flag_led_b = 1;
 					//					flag_poweron_blink = 1;
-					led_blink_count = blink_overload * 2 + 1; // ÉÁË¸Èı´Î
+					led_blink_count = blink_overload * 2 + 1; // é—ªçƒä¸‰æ¬¡
 					led_blink_half_circle = 50;
-					led_blink_delay = 0;  // ÉÁË¸£¬ĞèÒªÇåÁãÉÁË¸¼ÆÊ±
-					flag_blink_force = 1; // ÉèÎªÇ¿ÖÆ£¬ÉÁË¸¹ı³ÌÇå³ıÁ¬»÷×´Ì¬
+					led_blink_delay = 0;  // é—ªçƒï¼Œéœ€è¦æ¸…é›¶é—ªçƒè®¡æ—¶
+					flag_blink_force = 1; // è®¾ä¸ºå¼ºåˆ¶ï¼Œé—ªçƒè¿‡ç¨‹æ¸…é™¤è¿å‡»çŠ¶æ€
 				}
 			}
 		}
@@ -162,7 +162,7 @@ void ad_deal(void)
 }
 
 //-----------------------------------------//
-//---------------ADÖØÖÃ´¦Àí----------------//
+//---------------ADé‡ç½®å¤„ç†----------------//
 //-----------------------------------------//
 void ad_reset(void)
 {
@@ -177,7 +177,7 @@ void ad_reset(void)
 }
 
 /******************************************/
-//-------¿ªmos¾Í½øĞĞ¶ÌÂ·±£»¤IO¼à²â--------//
+//-------å¼€moså°±è¿›è¡ŒçŸ­è·¯ä¿æŠ¤IOç›‘æµ‹--------//
 /******************************************/
 void short_io_protect(void)
 {
@@ -217,7 +217,7 @@ void short_io_protect(void)
 			}
 		} while (a--);
 		mos_duty = 0;
-		mos_off(); // ½ô¼±¹Ø±ÕÊä³ö
+		mos_off(); // ç´§æ€¥å…³é—­è¾“å‡º
 		//		flag_overload = 1;
 		flag_pre_heat = 0;
 		flag_smoking = 0;
@@ -229,11 +229,11 @@ void short_io_protect(void)
 		flag_led_b = 1;
 		//		flag_poweron_blink = 1;
 		//		V_out_degree = 0;
-		led_blink_count = blink_overload * 2 + 1; // ÉÁË¸Èı´Î
+		led_blink_count = blink_overload * 2 + 1; // é—ªçƒä¸‰æ¬¡
 		led_blink_half_circle = 50;
-		led_blink_delay = 0;  // ÉÁË¸£¬ĞèÒªÇåÁãÉÁË¸¼ÆÊ±
-		flag_blink_force = 1; // ÉèÎªÇ¿ÖÆ£¬ÉÁË¸¹ı³ÌÇå³ıÁ¬»÷×´Ì¬     test 00000
-							  //		ad_reset();//ÄÇ±ß»á¸´Î»AD
+		led_blink_delay = 0;  // é—ªçƒï¼Œéœ€è¦æ¸…é›¶é—ªçƒè®¡æ—¶
+		flag_blink_force = 1; // è®¾ä¸ºå¼ºåˆ¶ï¼Œé—ªçƒè¿‡ç¨‹æ¸…é™¤è¿å‡»çŠ¶æ€     test 00000
+							  //		ad_reset();//é‚£è¾¹ä¼šå¤ä½AD
 	}
 }
 
@@ -242,7 +242,7 @@ void temp_alarm(void)
 	if (flag_temp_alarm)
 	{
 		mos_duty = 0;
-		mos_off(); // ½ô¼±¹Ø±ÕÊä³ö
+		mos_off(); // ç´§æ€¥å…³é—­è¾“å‡º
 		//		flag_overload = 1;
 		flag_pre_heat = 0;
 		flag_smoking = 0;
@@ -254,7 +254,7 @@ void temp_alarm(void)
 		 flag_led_b = 1;
 		//		flag_poweron_blink = 1;
 		//		V_out_degree = 0;
-		led_blink_count = 7 * 2 + 1; // ÉÁË¸Èı´Î
+		led_blink_count = 7 * 2 + 1; // é—ªçƒä¸‰æ¬¡
 		led_blink_half_circle = 50;
 
 		flag_temp_alarm = 0;
@@ -279,9 +279,9 @@ void temperature_check_sample_once(void)
 		temp_ad_sum += ad_value; // adcr;
 	}
 
-	AD_Start = 1; // ¿ªÊ¼
+	AD_Start = 1; // å¼€å§‹
 
-	// short_io_protect(); // io¶ÌÂ·±£»¤
+	// short_io_protect(); // ioçŸ­è·¯ä¿æŠ¤
 
 	if ((flag_mos && (!flag_mos_pre)) || ((!flag_mos) && flag_mos_pre))
 	{
@@ -305,175 +305,59 @@ void temperature_check_sample_once(void)
 		temp_ad_sum = 0;
 	}
 }
-
-
-// void temp_ad_deal(void)
-// {
-// 	if (ad_turn == 0)		//V_OUT
-// 	{
-// 		// $ adcc enable, P_check_temprature; //ÏÂ´ÎÎÂ¶ÈÍ¨µÀ
-// 		$ adcc enable, P_check_temprature_ad;
-// 		p_check_temprature_in();
-// 		ad_turn++;
-
-// 		//ad_sum_out = ad_sum;
-
-// 		ad_sum_bandgap = ad_sum;
-// 		//ad_sum_out = ad_sum;
-// 		math_eword = ad_sum;
-// 		math_dword = 120 * 4096 * ad_times; // 1.2V,AD´ÎÊı
-// 		Math_Dword_Div_Eword();
-// 		if (flag_mos_pre)
-// 		{
-// 			VDD_smoking = math_dword; // ÎüÑÌÊ±µÄ°åÉÏµÄVDDµçÑ¹
-// 		}
-// 		else
-// 		{
-// 			VDD = math_dword; // ²É¼¯²»´øÔØµç³ØµçÑ¹
-// 		}
-// 	}
-// 	else if (ad_turn == 1)		//V_TENPRATURE
-// 	{
-// 		$ adcc enable, BANDGAP;
-// 		p_check_temprature_io_in();
-// 		p_check_io_in();
-// 		ad_turn = 0;
-
-
-// 		// (²»ÓÃ³ıÒÔ²ÉÑù´ÎÊı£¬ÒòÎªÁ½±ß¶¼ÀÛ¼ÓÁËN´Î)
-// 		//math_dword = ad_sum * 120;     // Vbg=1.2V£¬·Å´ó100±¶£¬120ÊÇ1.2*100
-// 		math_eword = ad_sum;
-// 		math_byte = 120;
-// 		Math_Eword_Mul_Byte();
-
-
-// 		math_eword = ad_sum_bandgap;
-// 		Math_Dword_Div_Eword();
-// 		V_temp = math_dword; // µ¥Î»£º0.01V£¨10mV£©£¬ÄãÓÃ×÷±ÈÖµ»ò²é±í¼´¿É
-
-
-// 		//R6 = R5*Vtemp/(Vout-Vtemp)
-// 		// math_eword = 6800;
-// 		// math_dword = V_temp;
-// 		// Math_Dword_Mul_Eword();
-
-// 		math_word = V_temp;    // 0.01Vµ¥Î»µÄV_temp
-// 		math_eword = 6800;     // 6.8kÅ·Ä·
-// 		EWord_Mul_Word(); // ½á¹ûÔÚmath_eword
-
-
-
-// 		math_eword = V_out-V_temp;
-// 		Math_Dword_Div_Eword();
-// 		R6 = math_dword;
-// 		if(R6<=1000)//²âÊÔÓÃºóÃæ¿ÉÒÔ¸ÄÎª²é±í»òÕß¼ÆËã¹«ÊÂ
-// 		{
-// 		//	flag_temp_alarm = 1;
-// 		}
-// 		else
-// 		{
-// 			flag_temp_alarm = 0;
-// 		}
-// 	}
-	
-// }
-
-// void temp_ad_deal(void)
-// {
-//     if (ad_turn == 0)   // ²ÉÍêBANDGAP£¬ÇĞµ½P_temp£¬´¦Àíbandgap
-//     {
-//         $ adcc enable, P_check_temprature_ad;   // ÏÂ´ÎÎÂ¶ÈÍ¨µÀ
-//         p_check_temprature_in();
-//         ad_turn++;
-
-//         ad_sum_bandgap = ad_sum;                // ±¾ÂÖ²É¼¯µ½µÄÊÇBANDGAP½á¹û
-
-//         // ¿ÉÑ¡£º´¦ÀíVout²Î¿¼£¨Èç¹ûÄãÓĞĞèÇó£¬ÕâÀïÊÇbandgapµÄADºÍ£©
-//     }
-//     else if (ad_turn == 1) // ²ÉÍêP_temp£¬ÇĞµ½BANDGAP£¬´¦ÀíÎÂ¶È
-//     {
-//         $ adcc enable, BANDGAP;                 // ÏÂ´ÎbandgapÍ¨µÀ
-//         p_check_temprature_io_in();             // ÉèÖÃ»ØIO£¨ÈçÓĞĞèÒª£©
-//         ad_turn = 0;
-
-//         // ÕâÀïµÄad_sumÊÇP_temp£¨NTC·ÖÑ¹£©²ÉÑù½á¹û
-//         // ÓÃÉÏÒ»´Îad_sum_bandgapÅäºÏ±¾´Îad_sum»¹Ô­V_temp
-
-//         // »¹Ô­V_temp = (ad_sum * 1.2 * 100) / ad_sum_bandgap
-//         math_eword = ad_sum;        // ÎÂ¶ÈÍ¨µÀADºÍ
-//         math_byte = 120;            // 1.2*100
-//         Math_Eword_Mul_Byte();
-
-//         math_eword = ad_sum_bandgap;
-//         Math_Dword_Div_Eword();
-
-//         V_temp = math_dword;        // µ¥Î»0.01V
-
-//         // R6 = R5 * V_temp / (Vout - V_temp)
-//         math_word = V_temp;
-//         math_eword = 6800;          // 6.8K
-//         EWord_Mul_Word();
-
-//         math_eword = V_out - V_temp;
-//         Math_Dword_Div_Eword();
-//         R6 = math_dword;
-
-//         // ÅĞ¶ÏÎÂ¶ÈãĞÖµ
-//         if(R6 <= 10000) { flag_temp_alarm = 1; }
-//         else { flag_temp_alarm = 0; }
-//     }
-// }
-
 void temp_ad_deal(void)
 {
-    if (ad_turn == 0)   // ²ÉÍêBANDGAP£¬ÇĞµ½P_temp£¬´¦Àíbandgap
+    if (ad_turn == 0)   // é‡‡å®ŒBANDGAPï¼Œåˆ‡åˆ°P_tempï¼Œå¤„ç†bandgap
     {
-        $ adcc enable, P_check_temprature_ad;   // ÏÂ´ÎÎÂ¶ÈÍ¨µÀ
+        $ adcc enable, P_check_temprature_ad;   // ä¸‹æ¬¡æ¸©åº¦é€šé“
         p_check_temprature_in();
         ad_turn++;
 
-        temp_ad_sum_bandgap = temp_ad_sum;                // ±¾ÂÖ²É¼¯µ½µÄÊÇBANDGAP½á¹û
-        // ²»ÒªÔÚÕâÀïÇåad_sum£¨ÏÂÒ»²½P_tempÒªÓÃad_sumÀÛ¼Ó£©
+        temp_ad_sum_bandgap = temp_ad_sum;                // æœ¬è½®é‡‡é›†åˆ°çš„æ˜¯BANDGAPç»“æœ
+        // ä¸è¦åœ¨è¿™é‡Œæ¸…ad_sumï¼ˆä¸‹ä¸€æ­¥P_tempè¦ç”¨ad_sumç´¯åŠ ï¼‰
     }
-    else if (ad_turn == 1) // ²ÉÍêP_temp£¬ÇĞµ½BANDGAP£¬´¦ÀíÎÂ¶È
+    else if (ad_turn == 1) // é‡‡å®ŒP_tempï¼Œåˆ‡åˆ°BANDGAPï¼Œå¤„ç†æ¸©åº¦
     {
-        $ adcc enable, BANDGAP;                 // ÏÂ´ÎbandgapÍ¨µÀ
-        p_check_temprature_io_in();             // ÉèÖÃ»ØIO£¨ÈçÓĞĞèÒª£©
+        $ adcc enable, BANDGAP;                 // ä¸‹æ¬¡bandgapé€šé“
+        p_check_temprature_io_in();             // è®¾ç½®å›IOï¼ˆå¦‚æœ‰éœ€è¦ï¼‰
         ad_turn = 0;
 
-        // ÕâÀïµÄad_sumÊÇP_temp£¨NTC·ÖÑ¹£©²ÉÑù½á¹û
-        // ÓÃÉÏÒ»´Îad_sum_bandgapÅäºÏ±¾´Îad_sum»¹Ô­V_temp
+        // è¿™é‡Œçš„ad_sumæ˜¯P_tempï¼ˆNTCåˆ†å‹ï¼‰é‡‡æ ·ç»“æœ
+        // ç”¨ä¸Šä¸€æ¬¡ad_sum_bandgapé…åˆæœ¬æ¬¡ad_sumè¿˜åŸV_temp
 
-        // »¹Ô­V_temp = (ad_sum * 1.2 * 100) / ad_sum_bandgap
-        math_eword = temp_ad_sum;        // ÎÂ¶ÈÍ¨µÀADºÍ
+        // è¿˜åŸV_temp = (ad_sum * 1.2 * 100) / ad_sum_bandgap
+        math_eword = temp_ad_sum;        // æ¸©åº¦é€šé“ADå’Œ
         math_byte = 120;            // 1.2*100
         Math_Eword_Mul_Byte();
 
         math_eword = temp_ad_sum_bandgap;
         Math_Dword_Div_Eword();
 
-        V_temp = math_dword;        // µ¥Î»0.01V
+        V_temp = math_dword;        // å•ä½0.01V
+		//V_temp = 286; æµ‹è¯•
 
         // R6 = R5 * V_temp / (Vout - V_temp)
-        math_word = V_temp;
-        math_eword = 6800;          // 6.8K
-        EWord_Mul_Word();           // ½á¹ûÔÚ math_eword
+        math_eword = V_temp;
+        math_byte = 7;          // 6.8K
+       // EWord_Mul_Word();           // ç»“æœåœ¨ math_eword
+	   Math_Eword_Mul_Byte();
 
-       // math_eword = V_out > V_temp ? (V_out - V_temp) : 1; // ·ÀÖ¹·ÖÄ¸Îª0
+       // math_eword = V_out > V_temp ? (V_out - V_temp) : 1; // é˜²æ­¢åˆ†æ¯ä¸º0
 	   if (V_out > V_temp)
 	   {
 		   math_eword = V_out - V_temp;
 	   }
 	   else
 	   {
-		   math_eword = 1;
+		   //math_eword = 1;
+		   return;
 	   }
 	
         Math_Dword_Div_Eword();
         R6 = math_dword;
 
-        // ÅĞ¶ÏÎÂ¶ÈãĞÖµ
-        // if(R6 <= 10000) { flag_temp_alarm = 1; }
-        // else { flag_temp_alarm = 0; }
+        // åˆ¤æ–­æ¸©åº¦é˜ˆå€¼
+        if(R6 <= 10) { flag_temp_alarm = 1; }
+        else { flag_temp_alarm = 0; }
     }
 }
