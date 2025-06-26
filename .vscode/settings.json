@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "ad.C": "cpp",
+        "pwm.C": "cpp",
+        "MAIN_TM8C.C": "cpp",
+        "led.C": "cpp",
+        "key_scan.C": "cpp",
+        "system.C": "cpp",
+        "math0.C": "cpp",
+        "iic-.C": "cpp",
+        "charge_full.C": "cpp",
+        "encrypt.C": "cpp",
+        "rf.C": "cpp",
+        "iic.C": "cpp",
+        "ad_out_test.C": "cpp"
+    }
+}
