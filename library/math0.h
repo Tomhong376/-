@@ -7,6 +7,7 @@ extern dword math_dword;
 
 
 void	EWord_Mul_Word (void);
+void    EWord_Mul_Word_Full(void);
 //void	Math_5bytes_Div_EWord (void);
 void	Math_Eword_Div_Word(void);
 void	Math_Word_Mul_Byte (void);

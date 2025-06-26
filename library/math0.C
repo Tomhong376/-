@@ -38,6 +38,13 @@ void	EWord_Mul_Word (void)
 }
 
 
+void  EWord_Mul_Word_Full(void)
+{
+        dword tmp = (dword)math_eword * (word)math_word;
+        math_dword = tmp;
+}
+
+
 
 
 /*
