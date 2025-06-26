@@ -1,0 +1,34 @@
+
+
+#define key0	0x21
+#define key1	0x11
+#define key2	0x89
+#define key3	0x4f
+#define key4	0x76
+#define key5	0x3b
+#define key6	0x21
+#define key7	0x30
+#define key8	0x2d
+#define key9	0x55
+#define key10	0x48
+#define key11	0x35
+#define key12	0x61
+#define key13	0x00
+#define key14	0xf8
+#define key15	0x95
+
+extern byte F;					//随机数
+extern byte data[8];			//iic收到的随机数
+extern byte E[8];
+extern byte ck235_des_data[10];
+extern byte encrypt_count0, encrypt_count1, encrypt_count2;
+extern byte encrypt_temp0, encrypt_temp1, encrypt_temp2, encrypt_temp3;
+
+extern byte r_encrypt_flag;
+extern bit flag_encrypt_ok;//	:r_encrypt_flag.0
+
+
+
+void En_Crypt(void);
+void key(void);	//密钥查表
+void bitreverse(void);//位反转

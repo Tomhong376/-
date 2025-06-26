@@ -1,0 +1,46 @@
+[Ram_Break]
+Break1=No 0000
+Break2=No 0000
+Break3=No 0000
+Break4=No 0000
+[Stack_Break]
+Break1=Au 0000 00FF
+Break2=Au 0000 00FF
+Break3=Au 0000 00FF
+Break4=Au 0000 00FF
+Break5=Au 0000 00FF
+Break6=Au 0000 00FF
+Break7=Au 0000 00FF
+Break8=Au 0000 00FF
+[Ctrl_Break]
+Mark=51 1
+ICE=0 6 2 1068
+[INI]
+PROJECT=PRE_FILE
+[LINKS]
+~MAIN_TM8C.C
+~library\key_scan.C
+~library\system.C
+~library\led.C
+~library\ad.C
+~library\math0.C
+~library\pwm.C
+[HEAD]
+~extern.h
+~define.h
+~library\key_scan.H
+~library\system.H
+~library\led.H
+~library\ad.h
+~library\math0.h
+~library\pwm.h
+[DEPEND]
+~$:INC_PDK\MFU121.INC
+~MAIN_TM8C.PRE
+~library\rf.H
+~library\math1.H
+~library\ad_out_test.h
+~library\iic.h
+[PRE]
+~MAIN_TM8C.PRJ
+~MAIN_TM8C.PRE
