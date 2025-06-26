@@ -353,7 +353,7 @@ void temp_ad_deal(void)
 		   return;
 	   }
 	
-        Math_Dword_Div_Eword();
+        Math_Dword_Div_Eword();   
         R6 = math_dword;
 
         // ≈–∂œŒ¬∂»„–÷µ
